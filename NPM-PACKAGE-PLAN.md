@@ -39,10 +39,11 @@ $ npx connectfour-solver install-book --list
 # Show available books:
 #   Depth   Positions    Size    Early-game coverage
 #   ────────────────────────────────────────────────
-#   8       ~118K        <1MB    Positions ≤8 moves
-#   10      ~1.2M        ~2MB    Positions ≤10 moves
-#   12      ~9.2M        ~12MB   Positions ≤12 moves
-#   14      ~49M         ~24MB   Positions ≤14 moves (full)
+#   6       ~11K         4MB     Positions ≤6 moves
+#   8       ~130K        4MB     Positions ≤8 moves
+#   10      ~1.2M        4MB     Positions ≤10 moves
+#   12      ~9.2M        16MB    Positions ≤12 moves
+#   14      ~58M         24MB    Positions ≤14 moves (full)
 
 Downloading 7x6-depth14.book from GitHub...
 ✓ Installed to node_modules/.cache/connectfour-solver/7x6.book (24MB)
@@ -166,19 +167,23 @@ Zero runtime dependencies. DevDependencies: `typescript`, `emscripten` (system i
 
 ### 7. Generate book files at each depth
 
-Smaller books (depth 8/10/12) are derived from the depth-14 book — no need to re-solve positions.
+**DONE** — All book files have been generated.
 
-**Create**: `tools/shrink-book.cpp`
+Smaller books are derived from the same scored position data used to build the depth-14 book. The `make-books.sh` script compiles a depth-specific generator for each target (since `BOOK_SIZE` and `DEPTH` are compile-time template parameters), concatenates the appropriate layer `scored.txt` files, and pipes them through.
 
-A standalone C++ tool that:
-1. Loads the full depth-14 book (reads the hash table into memory)
-2. Enumerates all valid Connect Four positions up to the target depth (recursive DFS over all legal move sequences, skipping positions where the game is already won)
-3. For each position, looks it up in the depth-14 hash table and copies the value into a new, smaller hash table (sized appropriately for the target depth's position count)
-4. Writes the new book with the target depth in the header
+Key sizing decisions — the `TranspositionTable` is a lossy cache (no collision resolution), so smaller books must be sized large enough to hold all positions without collisions:
 
-Usage: `./shrink-book 7x6.book 10 7x6-depth10.book`
+Key sizing decisions — the `TranspositionTable` is a lossy cache (no collision resolution), so layer ordering matters: deepest layers are fed first, shallow positions written last survive collisions.
 
-The enumeration is fast (~1.2M positions for depth 10, ~9.2M for depth 12) and the full book is already loaded. This is a one-time offline tool — run it locally, upload resulting `.book` files as GitHub Release assets.
+| Book | Positions | log_size | Table slots | Fill ratio | File size |
+|------|-----------|----------|-------------|------------|-----------|
+| depth-6 | 11K | 21 | 2.1M | <1% | 4MB |
+| depth-8 | 130K | 21 | 2.1M | 6% | 4MB |
+| depth-10 | 1.2M | 21 | 2.1M | 58% | 4MB |
+| depth-12 | 9.2M | 23 | 8.4M | lossy | 16MB |
+| depth-14 | 58M | 23 | 8.4M | lossy | 24MB |
+
+Upload all five `.book` files as GitHub Release assets.
 
 ### 8. Web app integration
 
@@ -219,7 +224,7 @@ Keep: `serverCache` Map, DB cache in `gameStates` table.
 | `src/lib/index.ts` | **CREATE** | connectfour-solver |
 | `src/lib/types.ts` | **CREATE** | connectfour-solver |
 | `src/cli/index.ts` | **CREATE** | connectfour-solver |
-| `tools/shrink-book.cpp` | **CREATE** | connectfour-solver |
+| `make-books.sh` | **DONE** | connectfour-solver |
 | `build/Makefile.emscripten` | **CREATE** | connectfour-solver |
 | `package.json` | **CREATE** | connectfour-solver |
 | `tsconfig.json` | **CREATE** | connectfour-solver |
