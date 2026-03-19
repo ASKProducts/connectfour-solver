@@ -2,7 +2,13 @@
 pascal-pons-solver/c4solver
 pascal-pons-solver/generator
 pascal-pons-solver/*.o
+dist/
 
 # Book generation working data
 pascal-pons-solver/book-generation/
 
+# Opening book files (distributed via GitHub Releases)
+*.book
+
+# Dependencies
+node_modules/

@@ -171,8 +171,6 @@ Zero runtime dependencies. DevDependencies: `typescript`, `emscripten` (system i
 
 Smaller books are derived from the same scored position data used to build the depth-14 book. The `make-books.sh` script compiles a depth-specific generator for each target (since `BOOK_SIZE` and `DEPTH` are compile-time template parameters), concatenates the appropriate layer `scored.txt` files, and pipes them through.
 
-Key sizing decisions — the `TranspositionTable` is a lossy cache (no collision resolution), so smaller books must be sized large enough to hold all positions without collisions:
-
 Key sizing decisions — the `TranspositionTable` is a lossy cache (no collision resolution), so layer ordering matters: deepest layers are fed first, shallow positions written last survive collisions.
 
 | Book | Positions | log_size | Table slots | Fill ratio | File size |
@@ -252,6 +250,19 @@ Keep: `serverCache` Map, DB cache in `gameStates` table.
 - **Warm request without book, ≥12 moves played**: <100ms
 - **Warm request without book, <12 moves played**: seconds (rare in practice)
 - **vs. current external API**: eliminates 300ms+ network latency + rate limiting
+
+## Repo cleanup for public release
+
+The repo is currently a working directory with internal docs and build artifacts. Before publishing as a public AGPL v3 package, clean up:
+
+- **LICENSE**: Add AGPL v3 license file at repo root (required by the license terms)
+- **README.md**: Public-facing README with package API, CLI usage, installation, build instructions, and attribution to Pascal Pons
+- **Remove internal docs**: `OVERVIEW.md`, `SOLVER-INTERNALS.md`, `BLOG-NOTES.md`, `BUILD-AND-RUN.md`, `NPM-PACKAGE-PLAN.md` — these are working notes, not public docs
+- **.gitignore**: Ignore build artifacts (`dist/`, `*.o`, `*.wasm`), `book-generation/` working directory, `node_modules/`
+- **Remove build artifacts from git**: `pascal-pons-solver/generator.o`, `pascal-pons-solver/generator` binary, `book-generation/` directory (800MB+ of scored data)
+- **Book files**: Remove `.book` files from git (they'll be GitHub Release assets, not tracked in the repo)
+- **Copyright headers**: Add AGPL v3 headers to new source files (`solver-wrapper.cpp`, TypeScript files)
+- **Attribution**: Prominently credit Pascal Pons as the original author of the Connect Four solver in README, LICENSE, and package.json. Link to the original project (http://connect4.gamesolver.org) and tutorial (http://blog.gamesolver.org). The AGPL v3 requires modified versions carry prominent notices (Section 5a).
 
 ## Verification
 

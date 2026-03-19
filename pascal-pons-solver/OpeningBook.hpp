@@ -173,6 +173,84 @@ class OpeningBook {
     else return T->get(P.key3());
   }
 
+  /**
+   * Load opening book from a memory buffer (for WASM use).
+   * Same binary format as load() but reads from uint8_t* instead of ifstream.
+   * Returns true on success, false on failure.
+   */
+  bool loadFromBuffer(const uint8_t* data, size_t length) {
+    depth = -1;
+    delete T;
+    T = 0;
+
+    if (length < 6) {
+      std::cerr << "Unable to load opening book from buffer: too short" << std::endl;
+      return false;
+    }
+
+    size_t offset = 0;
+
+    char _width = (char)data[offset++];
+    if (_width != width) {
+      std::cerr << "Unable to load opening book: invalid width (found: " << int(_width) << ", expected: " << width << ")" << std::endl;
+      return false;
+    }
+
+    char _height = (char)data[offset++];
+    if (_height != height) {
+      std::cerr << "Unable to load opening book: invalid height (found: " << int(_height) << ", expected: " << height << ")" << std::endl;
+      return false;
+    }
+
+    char _depth = (char)data[offset++];
+    if (_depth > width * height) {
+      std::cerr << "Unable to load opening book: invalid depth (found: " << int(_depth) << ")" << std::endl;
+      return false;
+    }
+
+    char partial_key_bytes = (char)data[offset++];
+    if (partial_key_bytes > 8) {
+      std::cerr << "Unable to load opening book: invalid internal key size (found: " << int(partial_key_bytes) << ")" << std::endl;
+      return false;
+    }
+
+    char value_bytes = (char)data[offset++];
+    if (value_bytes != 1) {
+      std::cerr << "Unable to load opening book: invalid value size (found: " << int(value_bytes) << ", expected: 1)" << std::endl;
+      return false;
+    }
+
+    char log_size = (char)data[offset++];
+    if (log_size > 40) {
+      std::cerr << "Unable to load opening book: invalid log2(size) (found: " << int(log_size) << ")" << std::endl;
+      return false;
+    }
+
+    if ((T = initTranspositionTable(partial_key_bytes, log_size))) {
+      size_t key_data_size = T->getSize() * partial_key_bytes;
+      size_t value_data_size = T->getSize() * value_bytes;
+
+      if (offset + key_data_size + value_data_size > length) {
+        std::cerr << "Unable to load opening book from buffer: insufficient data" << std::endl;
+        delete T;
+        T = 0;
+        return false;
+      }
+
+      memcpy(T->getKeys(), data + offset, key_data_size);
+      offset += key_data_size;
+      memcpy(T->getValues(), data + offset, value_data_size);
+      offset += value_data_size;
+
+      depth = _depth;
+      std::cerr << "Loaded opening book from buffer (" << length << " bytes)" << std::endl;
+      return true;
+    }
+
+    std::cerr << "Unable to initialize opening book" << std::endl;
+    return false;
+  }
+
   ~OpeningBook() {
     delete T;
   }

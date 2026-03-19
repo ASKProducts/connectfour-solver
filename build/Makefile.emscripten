@@ -1,0 +1,42 @@
+# Emscripten build for connectfour-solver WASM
+#
+# Prerequisites: emscripten SDK (emcc on PATH)
+# Usage: make -f Makefile.emscripten
+
+SOLVER_DIR = ../pascal-pons-solver
+WRAPPER_DIR = ../src/wasm
+OUT_DIR = ../dist/wasm
+
+CXX = em++
+CXXFLAGS = -std=c++11 -O3 -flto -DNDEBUG -Wall -I$(SOLVER_DIR)
+
+# Emscripten link flags
+LDFLAGS = \
+	-s MODULARIZE=1 \
+	-s EXPORT_NAME='createSolverModule' \
+	-s ENVIRONMENT='node' \
+	-s FILESYSTEM=0 \
+	-s ALLOW_MEMORY_GROWTH=1 \
+	-s INITIAL_MEMORY=134217728 \
+	-s MAXIMUM_MEMORY=268435456 \
+	-s EXPORTED_FUNCTIONS='["_solver_init","_solver_load_book","_solver_solve","_solver_analyze","_solver_reset","_solver_get_node_count","_malloc","_free"]' \
+	-s EXPORTED_RUNTIME_METHODS='["ccall","cwrap","HEAPU8","HEAP32","UTF8ToString","stringToUTF8"]' \
+	-s SINGLE_FILE=0
+
+SOURCES = \
+	$(WRAPPER_DIR)/solver-wrapper.cpp \
+	$(SOLVER_DIR)/Solver.cpp
+
+.PHONY: all clean
+
+all: $(OUT_DIR)/solver.cjs
+
+$(OUT_DIR)/solver.cjs: $(SOURCES) $(wildcard $(SOLVER_DIR)/*.hpp)
+	@mkdir -p $(OUT_DIR)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(OUT_DIR)/solver.js $(SOURCES)
+	@mv $(OUT_DIR)/solver.js $(OUT_DIR)/solver.cjs
+	@echo "Built: $(OUT_DIR)/solver.cjs + $(OUT_DIR)/solver.wasm"
+	@ls -lh $(OUT_DIR)/solver.cjs $(OUT_DIR)/solver.wasm
+
+clean:
+	rm -rf $(OUT_DIR)

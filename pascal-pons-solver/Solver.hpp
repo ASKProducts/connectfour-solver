@@ -72,6 +72,10 @@ class Solver {
     book.load(book_file);
   }
 
+  bool loadBookFromBuffer(const uint8_t* data, size_t length) {
+    return book.loadFromBuffer(data, length);
+  }
+
   Solver(); // Constructor
 };
 
