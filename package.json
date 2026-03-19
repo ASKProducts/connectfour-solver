@@ -37,8 +37,5 @@
   "devDependencies": {
     "@types/node": "^25.5.0",
     "typescript": "^5.7.0"
-  },
-  "dependencies": {
-    "connectfour-solver": "^1.0.0"
   }
 }
