@@ -57,16 +57,13 @@ function findBookPath(explicit?: string): string | null {
 }
 
 async function initSolver(options?: SolverOptions): Promise<Solver> {
-  // Load the Emscripten module factory
-  const modulePath = join(WASM_DIR, 'solver.cjs');
+  // Read WASM binary
   const wasmPath = join(WASM_DIR, 'solver.wasm');
-
-  // Read WASM binary so we control the path
   const wasmBinary = await readFile(wasmPath);
 
-  // Import the Emscripten factory (CommonJS module)
+  // Import the Emscripten factory — static path so bundlers (Turbopack/webpack) can resolve it
   const require = createRequire(import.meta.url);
-  const createSolverModule: SolverModuleFactory = require(modulePath);
+  const createSolverModule: SolverModuleFactory = require('../wasm/solver.cjs');
 
   const module: SolverModule = await createSolverModule({
     wasmBinary: wasmBinary.buffer.slice(
