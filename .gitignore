@@ -1,0 +1,8 @@
+# Build artifacts
+pascal-pons-solver/c4solver
+pascal-pons-solver/generator
+pascal-pons-solver/*.o
+
+# Book generation working data
+pascal-pons-solver/book-generation/
+

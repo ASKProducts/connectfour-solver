@@ -1,0 +1,134 @@
+=== Opening Book Generator (Layered) ===
+Workers: 16 | Max depth: 14
+Strategy: Solve depth 14→12→10→8→6→4→2→0, rebuilding book between layers
+
+[16:17:20] Positions file exists (58339652 positions)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[16:17:20] Layer d14: starting
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[16:17:21] Launching workers (with work stealing)...
+[16:17:21] Worker 01: 1392177 remaining (1679666/3071843 done)
+[16:17:21] Worker 00: 1800926 remaining (1266032/3066958 done)
+[16:17:21] Worker 04: 1682676 remaining (1385293/3067969 done)
+[16:17:21] Worker 02: 1399703 remaining (1669774/3069477 done)
+[16:17:21] Worker 03: 890677 remaining (2178509/3069186 done)
+[16:17:21] Worker 10: 1311933 remaining (1757866/3069799 done)
+[16:17:21] Worker 05: 990628 remaining (2082975/3073603 done)
+[16:17:21] Worker 07: 1066573 remaining (2007204/3073777 done)
+[16:17:21] Worker 11: 1161795 remaining (1908258/3070053 done)
+[16:17:21] Worker 06: 807267 remaining (2267163/3074430 done)
+[16:17:21] Worker 08: 712023 remaining (2365396/3077419 done)
+[16:17:21] Worker 09: 140430 remaining (2940521/3080951 done)
+[16:17:21] Worker 12: own chunk done, looking for work to steal...
+[16:17:21] Worker 13: own chunk done, looking for work to steal...
+[16:17:21] Worker 14: own chunk done, looking for work to steal...
+[16:17:21] Worker 15: own chunk done, looking for work to steal...
+[16:17:23] Worker 12: stealing 420111 from chunk 00 (1680446 remaining)
+[16:17:23] Worker 14: stealing 349925 from chunk 02 (1399703 remaining)
+[16:17:23] Worker 13: stealing 348044 from chunk 01 (1392177 remaining)
+[16:17:23] Worker 15: stealing 222669 from chunk 03 (890677 remaining)
+[16:26:44] Worker 09: own chunk done, looking for work to steal...
+[16:26:46] Worker 09: stealing 293157 from chunk 10 (1172631 remaining)
+[16:26:56] Worker 13: stealing 154139 from chunk 03 (616556 remaining)
+[16:32:16] Worker 14: stealing 385320 from chunk 04 (1541281 remaining)
+[16:36:06] Worker 15: stealing 171848 from chunk 05 (687392 remaining)
+[16:41:26] Worker 13: stealing 322696 from chunk 04 (1290787 remaining)
+[16:43:17] Worker 09: stealing 110797 from chunk 11 (443189 remaining)
+[16:43:41] Worker 15: stealing 84751 from chunk 06 (339004 remaining)
+[16:46:39] Worker 08: own chunk done, looking for work to steal...
+[16:46:41] Worker 08: stealing 145441 from chunk 10 (581766 remaining)
+[16:46:57] Worker 09: stealing 142253 from chunk 01 (569012 remaining)
+[16:49:50] Worker 15: stealing 246166 from chunk 00 (984667 remaining)
+[16:50:44] Worker 09: stealing 223447 from chunk 04 (893789 remaining)
+[16:52:15] Worker 12: stealing 25796 from chunk 05 (103184 remaining)
+[16:53:36] Worker 12: stealing 24499 from chunk 06 (97997 remaining)
+[16:54:02] Worker 12: stealing 6987 from chunk 11 (27950 remaining)
+[16:54:28] Worker 12: stealing 100041 from chunk 02 (400164 remaining)
+[16:55:33] Worker 08: stealing 92253 from chunk 02 (369015 remaining)
+[16:57:28] Worker 14: stealing 126352 from chunk 07 (505408 remaining)
+[16:58:00] Worker 11: own chunk done, looking for work to steal...
+[16:58:02] Worker 11: stealing 52115 from chunk 10 (208462 remaining)
+[16:58:58] Worker 09: stealing 72947 from chunk 01 (291790 remaining)
+[16:59:22] Worker 13: stealing 101950 from chunk 07 (407800 remaining)
+[17:00:35] Worker 09: stealing 29303 from chunk 02 (117215 remaining)
+[17:00:54] Worker 12: stealing 35388 from chunk 10 (141554 remaining)
+[17:01:18] Worker 14: stealing 30871 from chunk 10 (123485 remaining)
+[17:01:27] Worker 11: stealing 180943 from chunk 00 (723775 remaining)
+[17:01:31] Worker 08: stealing 58014 from chunk 07 (232056 remaining)
+[17:01:32] Worker 05: own chunk done, looking for work to steal...
+[17:01:35] Worker 05: stealing 27958 from chunk 10 (111833 remaining)
+[17:02:46] Worker 12: stealing 168811 from chunk 00 (675246 remaining)
+[17:02:48] Worker 14: stealing 168691 from chunk 00 (674767 remaining)
+[17:02:49] Worker 05: stealing 168602 from chunk 00 (674409 remaining)
+[17:02:54] Worker 13: stealing 3216 from chunk 10 (12866 remaining)
+[17:03:04] Worker 13: stealing 164055 from chunk 00 (656221 remaining)
+[17:03:34] Worker 09: stealing 151203 from chunk 00 (604815 remaining)
+[17:03:57] Worker 08: stealing 40231 from chunk 01 (160925 remaining)
+[17:04:43] Worker 08: stealing 125203 from chunk 00 (500815 remaining)
+[17:05:39] Worker 06: own chunk done, looking for work to steal...
+[17:05:42] Worker 06: stealing 18508 from chunk 04 (74033 remaining)
+[17:06:57] Worker 06: stealing 14015 from chunk 01 (56060 remaining)
+[17:07:20] Worker 06: stealing 9212 from chunk 04 (36850 remaining)
+[17:07:55] Worker 06: stealing 39152 from chunk 00 (156611 remaining)
+[17:10:46] Worker 06: nothing worth stealing
+[17:10:46] Worker 06: finished
+[17:11:30] Worker 15: nothing worth stealing
+[17:11:30] Worker 15: finished
+./generate-book.sh: line 543: 24573 Terminated: 15          "$SOLVER" $book_flag < "$steal_input" >> "$steal_output" 2>> "$steal_log"
+./generate-book.sh: line 543: 13244 Terminated: 15          "$SOLVER" $book_flag < "$steal_input" >> "$steal_output" 2>> "$steal_log"
+./generate-book.sh: line 543: 27225 Terminated: 15          "$SOLVER" $book_flag < "$steal_input" >> "$steal_output" 2>> "$steal_log"
+./generate-book.sh: line 543: 23930 Terminated: 15          "$SOLVER" $book_flag < "$steal_input" >> "$steal_output" 2>> "$steal_log"
+./generate-book.sh: line 543: 31353 Terminated: 15          "$SOLVER" $book_flag < "$steal_input" >> "$steal_output" 2>> "$steal_log"
+./generate-book.sh: line 543: 42036 Terminated: 15          "$SOLVER" $book_flag < "$steal_input" >> "$steal_output" 2>> "$steal_log"
+./generate-book.sh: line 517: 93510 Broken pipe: 13         tail -n +"$((done + 1))" "$input"
+     93511 Terminated: 15          | "$SOLVER" $book_flag >> "$output" 2>> "$log"
+./generate-book.sh: line 543: 24882 Terminated: 15          "$SOLVER" $book_flag < "$steal_input" >> "$steal_output" 2>> "$steal_log"
+./generate-book.sh: line 517: 93517 Broken pipe: 13         tail -n +"$((done + 1))" "$input"
+     93518 Terminated: 15          | "$SOLVER" $book_flag >> "$output" 2>> "$log"
+./generate-book.sh: line 517: 93507 Broken pipe: 13         tail -n +"$((done + 1))" "$input"
+     93508 Terminated: 15          | "$SOLVER" $book_flag >> "$output" 2>> "$log"
+./generate-book.sh: line 517: 93529 Broken pipe: 13         tail -n +"$((done + 1))" "$input"
+     93530 Terminated: 15          | "$SOLVER" $book_flag >> "$output" 2>> "$log"
+./generate-book.sh: line 517: 93513 Broken pipe: 13         tail -n +"$((done + 1))" "$input"
+     93515 Terminated: 15          | "$SOLVER" $book_flag >> "$output" 2>> "$log"
+./generate-book.sh: line 517: 93522 Broken pipe: 13         tail -n +"$((done + 1))" "$input"
+     93525 Terminated: 15          | "$SOLVER" $book_flag >> "$output" 2>> "$log"
+./generate-book.sh: line 517: 93514 Broken pipe: 13         tail -n +"$((done + 1))" "$input"
+     93516 Terminated: 15          | "$SOLVER" $book_flag >> "$output" 2>> "$log"
+[17:11:43] Worker 00: own chunk done, looking for work to steal...
+[17:11:43] Worker 03: own chunk done, looking for work to steal...
+[17:11:43] Worker 01: own chunk done, looking for work to steal...
+[17:11:43] Worker 07: own chunk done, looking for work to steal...
+[17:11:43] Worker 04: own chunk done, looking for work to steal...
+[17:11:43] Worker 02: own chunk done, looking for work to steal...
+[17:11:43] Worker 10: own chunk done, looking for work to steal...
+[17:11:45] Worker 01: nothing worth stealing
+[17:11:45] Worker 00: nothing worth stealing
+[17:11:45] Worker 01: finished
+[17:11:45] Worker 00: finished
+[17:11:45] Worker 07: nothing worth stealing
+[17:11:45] Worker 04: nothing worth stealing
+[17:11:45] Worker 04: finished
+[17:11:45] Worker 07: finished
+[17:11:45] Worker 14: nothing worth stealing
+[17:11:45] Worker 14: finished
+[17:11:45] Worker 11: nothing worth stealing
+[17:11:45] Worker 09: nothing worth stealing
+[17:11:45] Worker 03: nothing worth stealing
+[17:11:45] Worker 11: finished
+[17:11:45] Worker 09: finished
+[17:11:45] Worker 03: finished
+[17:11:45] Worker 12: nothing worth stealing
+[17:11:45] Worker 12: finished
+[17:11:45] Worker 02: nothing worth stealing
+[17:11:45] Worker 02: finished
+[17:11:45] Worker 05: nothing worth stealing
+[17:11:45] Worker 05: finished
+[17:11:45] Worker 10: nothing worth stealing
+[17:11:45] Worker 10: finished
+[17:11:45] Worker 13: nothing worth stealing
+[17:11:45] Worker 13: finished
+[17:11:45] Worker 08: nothing worth stealing
+[17:11:45] Worker 08: finished
+./generate-book.sh: line 624: local: can only be used in a function

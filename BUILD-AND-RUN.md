@@ -81,21 +81,26 @@ The solver looks for `7x6.book` in the current directory. Without it:
 
 ### Generating an Opening Book
 
-1. Generate positions to solve:
-   ```bash
-   ./generator 14 > positions.txt
-   ```
-2. Solve them (this takes a very long time):
-   ```bash
-   ./c4solver < positions.txt > scored.txt
-   ```
-3. Create the book:
-   ```bash
-   ./generator < scored.txt
-   ```
-   This produces `7x6.book`.
+Use the automated script (parallelized, resumable):
 
-**Note**: Generating a full opening book is computationally expensive. The online solver at connect4.gamesolver.org uses a pre-computed book that is not available for download.
+```bash
+./generate-book.sh          # Start with 16 workers (default)
+./generate-book.sh 8        # Or specify worker count
+./generate-book.sh status   # Check progress (run in another terminal)
+./generate-book.sh combine  # Manually combine + build book
+```
+
+**Safe to interrupt** — Ctrl+C at any time, re-run to resume. Progress is tracked per-worker by counting output lines.
+
+Estimated time: ~16-20 hours wall time on 16 cores (Apple Silicon Mac).
+
+#### Manual Steps (for reference)
+
+1. Generate positions: `./generator 14 > positions.txt`
+2. Solve them: `./c4solver < positions.txt > scored.txt`
+3. Create the book: `./generator < scored.txt` → produces `7x6.book`
+
+**Note**: Generating a full opening book is computationally expensive (~69M positions, ~250-300 CPU-hours). The online solver at connect4.gamesolver.org uses a pre-computed book that is not available for download.
 
 ## Performance Notes (without opening book)
 
