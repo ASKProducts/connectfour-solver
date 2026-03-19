@@ -23,13 +23,13 @@ npm install connectfour-solver
 
 ### Opening Book
 
-The solver works without an opening book but is much faster with one. Install the opening book separately:
+The solver **requires** an opening book. Install it after `npm install`:
 
 ```bash
 npx connectfour-solver install-book
 ```
 
-This downloads the depth-14 book (~24MB) from GitHub Releases. Smaller books are available:
+By default this downloads the Pascal Pons original full book (32MB, recommended). Smaller books are available:
 
 ```bash
 npx connectfour-solver install-book --list
@@ -42,7 +42,8 @@ npx connectfour-solver install-book --depth 10
 | 8 | ~130K | 4MB | Positions ≤8 moves |
 | 10 | ~1.2M | 4MB | Positions ≤10 moves |
 | 12 | ~9.2M | 16MB | Positions ≤12 moves |
-| 14 | ~58M | 24MB | Positions ≤14 moves (full) |
+| 14 | ~58M | 24MB | Positions ≤14 moves |
+| full | ~58M | 32MB | Pascal Pons original (fewer hash collisions, recommended) |
 
 ## Usage
 

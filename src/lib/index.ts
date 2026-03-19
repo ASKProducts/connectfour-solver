@@ -78,26 +78,26 @@ async function initSolver(options?: SolverOptions): Promise<Solver> {
   // Initialize solver
   module._solver_init();
 
-  // Try to load opening book
-  let _bookLoaded = false;
+  // Load opening book (required)
   const bookPath = findBookPath(options?.bookPath);
-  if (bookPath) {
-    try {
-      const bookData = await readFile(bookPath);
-      const bookPtr = module._malloc(bookData.length);
-      module.HEAPU8.set(bookData, bookPtr);
-      const result = module._solver_load_book(bookPtr, bookData.length);
-      module._free(bookPtr);
-      _bookLoaded = result === 1;
-      if (_bookLoaded) {
-        console.error(`Loaded opening book: ${bookPath} (${(bookData.length / 1024 / 1024).toFixed(1)}MB)`);
-      }
-    } catch (err) {
-      console.error(`Warning: failed to load opening book from ${bookPath}:`, err);
-    }
-  } else {
-    console.error('Warning: no opening book found. Solver will work but early positions will be slow.');
+  if (!bookPath) {
+    throw new Error(
+      'No opening book found. Install one with: npx connectfour-solver install-book\n' +
+      'Searched: node_modules/.cache/connectfour-solver/7x6.book, ./7x6.book'
+    );
   }
+
+  let _bookLoaded = false;
+  const bookData = await readFile(bookPath);
+  const bookPtr = module._malloc(bookData.length);
+  module.HEAPU8.set(bookData, bookPtr);
+  const result = module._solver_load_book(bookPtr, bookData.length);
+  module._free(bookPtr);
+  _bookLoaded = result === 1;
+  if (!_bookLoaded) {
+    throw new Error(`Failed to load opening book from ${bookPath} — file may be corrupt`);
+  }
+  console.error(`Loaded opening book: ${bookPath} (${(bookData.length / 1024 / 1024).toFixed(1)}MB)`);
 
   const weak = options?.weak ?? false;
 

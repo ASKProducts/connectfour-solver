@@ -29,8 +29,12 @@ const BOOKS: BookInfo[] = [
   { depth: 8, positions: '~130K', size: '4MB', coverage: 'Positions ≤8 moves' },
   { depth: 10, positions: '~1.2M', size: '4MB', coverage: 'Positions ≤10 moves' },
   { depth: 12, positions: '~9.2M', size: '16MB', coverage: 'Positions ≤12 moves' },
-  { depth: 14, positions: '~58M', size: '24MB', coverage: 'Positions ≤14 moves (full)' },
+  { depth: 14, positions: '~58M', size: '24MB', coverage: 'Positions ≤14 moves' },
 ];
+
+// Pascal Pons' original full book — larger table (log_size=24) means fewer hash collisions
+const FULL_BOOK_URL = 'https://github.com/PascalPons/connect4/releases/download/book/7x6.book';
+const FULL_BOOK_SIZE = '32MB';
 
 function getVersion(): string {
   try {
@@ -56,36 +60,53 @@ function showList(): void {
     const size = b.size.padStart(6);
     console.log(`  ${depth}   ${positions}   ${size}    ${b.coverage}`);
   }
+  console.log(`  full       ~58M    32MB    Pascal Pons original (fewer collisions)`);
   console.log('');
 }
 
-async function installBook(depth: number): Promise<void> {
-  const book = BOOKS.find(b => b.depth === depth);
-  if (!book) {
-    console.error(`Error: invalid depth ${depth}. Valid depths: ${BOOKS.map(b => b.depth).join(', ')}`);
-    process.exit(1);
-  }
-
-  const version = getVersion();
-  const url = `https://github.com/ASKProducts/connectfour-solver/releases/download/v${version}/7x6-depth${depth}.book`;
+async function installBook(depth: number | 'full'): Promise<void> {
   const cacheDir = getCacheDir();
   const outPath = resolve(cacheDir, '7x6.book');
 
-  console.log(`Downloading depth-${depth} opening book (${book.size})...`);
+  let url: string;
+  let sizeLabel: string;
+
+  if (depth === 'full') {
+    url = FULL_BOOK_URL;
+    sizeLabel = FULL_BOOK_SIZE;
+    console.log(`Downloading Pascal Pons full opening book (${sizeLabel})...`);
+  } else {
+    const book = BOOKS.find(b => b.depth === depth);
+    if (!book) {
+      console.error(`Error: invalid depth ${depth}. Valid depths: ${BOOKS.map(b => b.depth).join(', ')}, or --full`);
+      process.exit(1);
+    }
+    sizeLabel = book.size;
+
+    const version = getVersion();
+    url = `https://github.com/ASKProducts/connectfour-solver/releases/download/v${version}/7x6-depth${depth}.book`;
+    console.log(`Downloading depth-${depth} opening book (${sizeLabel})...`);
+  }
+
   console.log(`URL: ${url}`);
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    // Try without version prefix for flexibility
+  const response = await fetch(url, { redirect: 'follow' });
+  if (!response.ok && depth !== 'full') {
+    // Try latest release as fallback
     const altUrl = `https://github.com/ASKProducts/connectfour-solver/releases/latest/download/7x6-depth${depth}.book`;
     console.log(`Primary URL failed (${response.status}), trying: ${altUrl}`);
-    const altResponse = await fetch(altUrl);
+    const altResponse = await fetch(altUrl, { redirect: 'follow' });
     if (!altResponse.ok) {
       console.error(`Error: failed to download book (HTTP ${altResponse.status})`);
       process.exit(1);
     }
     await downloadToFile(altResponse, cacheDir, outPath);
     return;
+  }
+
+  if (!response.ok) {
+    console.error(`Error: failed to download book (HTTP ${response.status})`);
+    process.exit(1);
   }
 
   await downloadToFile(response, cacheDir, outPath);
@@ -135,7 +156,8 @@ function showHelp(): void {
   console.log(`connectfour-solver — WASM Connect Four solver
 
 Usage:
-  connectfour-solver install-book             Install opening book (default: depth 14)
+  connectfour-solver install-book             Install opening book (default: --full)
+  connectfour-solver install-book --full      Pascal Pons original book (32MB, recommended)
   connectfour-solver install-book --depth N   Install book at specific depth (6/8/10/12/14)
   connectfour-solver install-book --list      Show available books
   connectfour-solver --help                   Show this help
@@ -156,10 +178,14 @@ if (args[0] === 'install-book') {
     process.exit(0);
   }
 
-  let depth = 14;
-  const depthIdx = args.indexOf('--depth');
-  if (depthIdx !== -1 && args[depthIdx + 1]) {
-    depth = parseInt(args[depthIdx + 1], 10);
+  let depth: number | 'full' = 'full'; // default to full Pascal Pons book
+  if (args.includes('--full')) {
+    depth = 'full';
+  } else {
+    const depthIdx = args.indexOf('--depth');
+    if (depthIdx !== -1 && args[depthIdx + 1]) {
+      depth = parseInt(args[depthIdx + 1], 10);
+    }
   }
 
   installBook(depth).catch(err => {
