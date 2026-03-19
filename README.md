@@ -89,7 +89,7 @@ solver.reset();                 // clear transposition table
 const solver = await createSolver({ bookPath: '/path/to/7x6.book' });
 ```
 
-Book discovery order: explicit `bookPath` > `node_modules/.cache/connectfour-solver/7x6.book` > `./7x6.book` > no book (with warning).
+Book discovery order: explicit `bookPath` > `node_modules/.cache/connectfour-solver/7x6.book` > `./7x6.book`. If no book is found, `createSolver()` throws with instructions to install one.
 
 ## Building from Source
 
